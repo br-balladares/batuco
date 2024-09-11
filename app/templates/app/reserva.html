@@ -1,0 +1,104 @@
+{% extends 'app/base.html' %}
+
+{% block js %}
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Información del Paciente -->
+            <div class="col-md-4 mb-3">
+                <h2>Información del Paciente</h2>
+                <div class="mb-3">
+                    <label for="paciente_nombre" class="form-label">Nombre del Paciente</label>
+                    <input type="text" class="form-control" id="paciente_nombre" name="paciente_nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="paciente_especie" class="form-label">Especie</label>
+                    <input type="text" class="form-control" id="paciente_especie" name="paciente_especie" required>
+                </div>
+                <div class="mb-3">
+                    <label for="paciente_raza" class="form-label">Raza</label>
+                    <input type="text" class="form-control" id="paciente_raza" name="paciente_raza">
+                </div>
+                <div class="mb-3">
+                    <label for="paciente_edad" class="form-label">Edad (en años)</label>
+                    <input type="number" class="form-control" id="paciente_edad" name="paciente_edad" min="0" required>
+                </div>
+            </div>
+
+            <!-- Información del Dueño -->
+            <div class="col-md-4 mb-3">
+                <h2>Información del Dueño</h2>
+                <div class="mb-3">
+                    <label for="dueno_nombre" class="form-label">Nombre del Dueño</label>
+                    <input type="text" class="form-control" id="dueno_nombre" name="dueno_nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dueno_telefono" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="dueno_telefono" name="dueno_telefono" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dueno_correo" class="form-label">Correo</label>
+                    <input type="email" class="form-control" id="dueno_correo" name="dueno_correo" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dueno_rut" class="form-label">RUT</label>
+                    <input type="text" class="form-control" id="dueno_rut" name="dueno_rut" required>
+                </div>
+            </div>
+
+            <!-- Detalles de la Cita -->
+            <div class="col-md-4 mb-3">
+                <h2>Detalles de la Cita</h2>
+                <div class="mb-3">
+                    <label for="cita_fecha" class="form-label">Fecha</label>
+                    <input type="date" class="form-control" id="cita_fecha" name="cita_fecha" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cita_hora" class="form-label">Hora</label>
+                    <input type="time" class="form-control" id="cita_hora" name="cita_hora" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cita_motivo" class="form-label">Motivo</label>
+                    <textarea class="form-control" id="cita_motivo" name="cita_motivo" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="especialidad" class="form-label">Especialidad</label>
+                    <select class="form-select" id="especialidad" name="especialidad" required>
+                        <option value="" selected>Seleccione</option>
+                        <option value="1">Cardiología</option>
+                        <option value="2">Dermatología</option>
+                        <option value="3">Cirugía</option>
+                        <!-- Agrega más opciones según tus necesidades -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="veterinario" class="form-label">Veterinario</label>
+                    <select class="form-select" id="veterinario" name="veterinario" required>
+                        <option value="" selected>Seleccione un veterinario</option>
+                        {% for veterinario in veterinarios %}
+                            <option value="{{ veterinario.id }}">{{ veterinario.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón para enviar el formulario -->
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Guardar Cita</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
