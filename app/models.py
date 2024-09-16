@@ -40,14 +40,13 @@ class Especialidad(models.Model):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     id_usuario = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nombre_usu = models.CharField(max_length=100)
-    direccion_usu = models.CharField(max_length=200)
-    correo_usu = models.EmailField(unique=True)
+    nombre = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=200)
+    correo = models.EmailField(unique=True)
     telefono = models.CharField(max_length=15)
     ciudad = models.CharField(max_length=50)
     comuna = models.CharField(max_length=50)
-    rut_usu = models.CharField(max_length=12, unique=True)
-    correo_vet = models.EmailField(blank=True, null=True)
+    rut = models.CharField(max_length=12, unique=True)
     tipo_permiso = models.CharField(max_length=50)
     icono = models.ImageField(upload_to='user_icons/', blank=True, null=True)
     status = models.BooleanField(default=True)
@@ -74,11 +73,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'correo_usu'
-    REQUIRED_FIELDS = ['nombre_usu', 'rut_usu']
+    USERNAME_FIELD = 'correo'
+    REQUIRED_FIELDS = ['nombre', 'rut']
 
     def __str__(self):
-        return self.correo_usu
+        return self.correo
 
 class Mascota(models.Model):
     id_mascota = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
