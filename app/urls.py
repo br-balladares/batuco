@@ -6,4 +6,5 @@ urlpatterns = [
     path('contacto/', contacto, name="contacto"),
     path('reserva/', reserva, name="reserva"),
     path('cuenta/', cuenta, name="cuenta"),
+    path('registro/', registro, name="registro"),
 ]
