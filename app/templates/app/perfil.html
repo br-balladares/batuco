@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+
+{% block css %}
+<!-- Referencia al archivo CSS -->
+<link rel="stylesheet" href="{% static 'app/css/estilos.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <h2>Mi Perfil</h2>
+    <div class="row">
+        <!-- Información del Usuario en la columna izquierda -->
+        <div class="col-md-4 mb-3">
+            <h3>Información del Usuario</h3>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ usuario.nombre }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccion" name="direccion" value="{{ usuario.direccion }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="correo" name="correo" value="{{ usuario.correo }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" value="{{ usuario.telefono }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <input type="text" class="form-control" id="ciudad" name="ciudad" value="{{ usuario.ciudad }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="comuna" class="form-label">Comuna</label>
+                <input type="text" class="form-control" id="comuna" name="comuna" value="{{ usuario.comuna }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="rut" class="form-label">RUT</label>
+                <input type="text" class="form-control" id="rut" name="rut" value="{{ usuario.rut }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="icono" class="form-label">Icono</label>
+                {% if usuario.icono %}
+                    <img src="{{ usuario.icono.url }}" alt="Icono" style="max-width: 100px;">
+                {% else %}
+                    <p>No hay icono disponible</p>
+                {% endif %}
+            </div>
+            <a class="btn btn-primary" href="{% url 'actualizar' %}">Actualizar Información</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<!-- Referencia al archivo JS -->
+<script src="{% static 'js/panel_toggle.js' %}"></script>
+{% endblock %}
