@@ -4,25 +4,24 @@ import uuid
 import datetime
 
 class CustomUserManager(BaseUserManager):
-    def crear_usuario(self, email, password=None, **extra_fields):
-        if not email:
+    def create_user(self, correo, nombre, rut, password=None, **extra_fields):
+        if not correo:
             raise ValueError('El usuario debe tener un correo electrónico')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        correo = self.normalize_email(correo)
+        user = self.model(correo=correo, nombre=nombre, rut=rut, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def crear_admin(self, email, password=None, **extra_fields):
+    def create_superuser(self, correo, nombre, rut, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
+            raise ValueError('El superusuario debe tener is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
-        return self.crear_usuario(email, password, **extra_fields)
+            raise ValueError('El superusuario debe tener is_superuser=True.')
+        return self.create_user(correo, nombre, rut, password, **extra_fields)
 
 class TipoUsuario(models.Model):
     id_tipo_usuario = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -60,16 +59,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     # Campos que generan conflicto con Django's User
-    groups = models.ManyToManyField(
-        Group,
-        related_name='custom_user_set',
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='custom_user_permissions_set',
-        blank=True
-    )
+    groups = models.ManyToManyField(Group, related_name='custom_user_set', blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions_set', blank=True)
 
     objects = CustomUserManager()
 
@@ -78,6 +69,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.correo
+
+    def get_name(self):
+        return self.nombre_usu
 
 class Mascota(models.Model):
     id_mascota = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Editar Perfil{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app/css/estilos.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <h2>Editar Perfil</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                <a href="{% url 'perfil' %}" class="btn btn-danger">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
