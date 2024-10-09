@@ -10,5 +10,8 @@ urlpatterns = [
     path('perfil/', perfil, name="perfil"),
     path('login/', user_login, name="login"),
     path('actualizar/', editar_usuario, name="actualizar"),
+    path('mascota/', mascota, name="mascota"),
+    path('agregar_mascota/', agregar_mascota, name="agregar_mascota"),
+    path('administracion/', administracion_view, name="administracion"),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
 ]

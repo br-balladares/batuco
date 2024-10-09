@@ -50,3 +50,9 @@
     color: #FFFFFF; /* Blanco */
   }
   
+  #mascotas-lista {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 400px; /* Ajusta la altura según sea necesario */
+}

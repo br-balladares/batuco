@@ -1,0 +1,297 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <button class="col-md-3 btn" onclick="toggleSection('usuarios-section')">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios</h5>
+                    <p class="card-text">Gestión de usuarios</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="col-md-3 btn" onclick="toggleSection('roles-section')">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Roles</h5>
+                    <p class="card-text">Gestión de roles</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="col-md-3 btn" onclick="toggleSection('mascotas-section')">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mascotas</h5>
+                    <p class="card-text">Gestión de mascotas</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="col-md-3 btn" onclick="toggleSection('reservas-section')">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reservas</h5>
+                    <p class="card-text">Gestión de reservas</p>
+                </div>
+            </div>
+        </button>
+    </div>
+
+    <div id="usuarios-section" class="mt-5" style="display:none;">
+        <h3>Lista de Usuarios</h3>
+        <div class="mb-3">
+            <a href="{% url 'registro' %}" class="btn btn-primary">Crear Usuario</a>
+        </div>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}  <!-- Usar crispy para mostrar el formulario -->
+        </form>
+        <div id="usuarios-content"></div>
+    </div>
+
+    <div id="roles-section" class="mt-5" style="display:none;">
+        <h3>Lista de Roles</h3>
+        <div id="roles-content"></div>
+    </div>
+
+    <div id="mascotas-section" class="mt-5" style="display:none;">
+        <h3>Lista de Mascotas</h3>
+        <div id="mascotas-content"></div>
+    </div>
+
+    <div id="reservas-section" class="mt-5" style="display:none;">
+        <h3>Lista de Reservas</h3>
+        <div id="reservas-content"></div>
+    </div>
+</div>
+
+<script>
+    function enableSaveButton(element) {
+        const row = element.closest('tr'); // Obtener la fila más cercana
+        const saveButton = row.querySelector('.btn-success'); // Encontrar el botón de guardar en la fila
+        if (saveButton) {
+            saveButton.disabled = false; // Habilitar el botón de guardar
+        }
+    }
+
+    function toggleSection(sectionId) {
+        // Ocultar todas las secciones
+        const sections = ['usuarios-section', 'roles-section', 'mascotas-section', 'reservas-section'];
+        sections.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                section.style.display = 'none';
+            }
+        });
+
+        // Mostrar la sección seleccionada
+        const selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+            // Cargar contenido correspondiente
+            if (sectionId === 'usuarios-section') {
+                loadUsuarios(); // Cargar contenido de usuarios al mostrar la sección
+            } else if (sectionId === 'mascotas-section') {
+                loadMascotas(); // Cargar contenido de mascotas al mostrar la sección
+            }
+        }
+    }
+
+    function loadUsuarios() {
+        const usuarioData = {{ usuarios|safe }}; // Cargar la lista de usuarios desde el contexto de Django
+        let content = `
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>ID</th>
+                        <th>R.U.T</th>
+                        <th>Status</th>
+                        <th>Tipo de Permiso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        usuarioData.forEach(usuario => {
+            content += `
+                <tr data-id="${usuario.id_usuario}">
+                    <td>
+                        <input type="text" class="form-control" value="${usuario.nombre}" onchange="enableSaveButton(this)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="${usuario.correo}" readonly>
+                    </td>
+                    <td>${usuario.id_usuario}</td>
+                    <td>${usuario.rut}</td>
+                    <td>${usuario.status ? 'Activo' : 'Inactivo'}</td>
+                    <td>
+                        <select class="form-control" onchange="enableSaveButton(this)">
+                            <option value="">--</option>
+                            <option value="Admin" ${usuario.tipo_permiso === 'Admin' ? 'selected' : ''}>Admin</option>
+                            <option value="User" ${usuario.tipo_permiso === 'User' ? 'selected' : ''}>User</option>
+                            <option value="Guest" ${usuario.tipo_permiso === 'Guest' ? 'selected' : ''}>Guest</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-success" onclick="saveUser('${usuario.id_usuario}')">Guardar</button>
+                        <button class="btn btn-danger" onclick="deleteUser('{{ usuario.id_usuario }}')">Eliminar</button>
+                    </td>
+                </tr>`;
+        });
+
+        content += `
+                </tbody>
+            </table>`;
+
+        document.getElementById('usuarios-content').innerHTML = content;
+    }
+
+    function loadMascotas() {
+        const mascotaData = {{ mascotas|safe }}; // Cargar la lista de mascotas desde el contexto de Django
+        let content = `
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre de Mascota</th>
+                        <th>Edad</th>
+                        <th>Especie</th>
+                        <th>Raza</th>
+                        <th>ID Usuario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        mascotaData.forEach(mascota => {
+            content += `
+                <tr data-id="${mascota.id_mascota}">
+                    <td>
+                        <input type="text" class="form-control" value="${mascota.nombre_mascota}" onchange="enableSaveButton(this)">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" value="${mascota.edad_mascota}" onchange="enableSaveButton(this)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="${mascota.especie_mascota}" onchange="enableSaveButton(this)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="${mascota.raza_mascota}" onchange="enableSaveButton(this)">
+                    </td>
+                    <td>${mascota.id_usuario}</td>
+                    <td>
+                        <button class="btn btn-success" onclick="saveMascota('${mascota.id_mascota}')">Guardar</button>
+                        <button class="btn btn-danger" onclick="deleteMascota('${mascota.id_mascota}')">Eliminar</button>
+                    </td>
+                </tr>`;
+        });
+
+        content += `
+                </tbody>
+            </table>`;
+        
+        document.getElementById('mascotas-content').innerHTML = content;
+    }
+
+    function saveUser(userId) {
+    const row = document.querySelector(`tr[data-id="${userId}"]`);
+    if (!row) return;
+
+    const nombreInput = row.querySelector('input[type="text"]');
+    const correoInput = row.querySelectorAll('input[type="text"]')[1];
+    const tipoPermiso = row.querySelector('select').value;
+
+    const confirmacion = confirm("¿Estás seguro de que deseas guardar los cambios?");
+    if (confirmacion) {
+        const formData = new FormData();
+        formData.append('action', 'update'); // Indicar la acción
+        formData.append('id_usuario', userId);
+        formData.append('nombre', nombreInput.value);
+        formData.append('correo', correoInput.value);
+        formData.append('tipo_permiso', tipoPermiso);
+
+        fetch('/administracion/', {  
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return response.text().then(text => {
+                    alert('Error al actualizar el usuario: ' + text);
+                });
+            }
+        })
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            // Aquí puedes manejar el HTML devuelto, si es necesario
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al actualizar el usuario.');
+        });
+    }
+}
+
+function deleteUser(userId) {
+    // Confirmar si el usuario realmente quiere eliminar
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+    if (confirmDelete) {
+        const formData = new FormData();
+        formData.append('action', 'delete'); // Indicar la acción
+        formData.append('id_usuario', userId);
+
+        fetch('/administracion/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); // Recargar la página
+            } else {
+                return response.text().then(text => {
+                    alert('Error al eliminar el usuario: ' + text);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el usuario.');
+        });
+    }
+}
+
+
+
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Si este cookie string comienza con el nombre que buscamos, obtenemos su valor
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

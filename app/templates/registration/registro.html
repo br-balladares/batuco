@@ -30,6 +30,20 @@
                             <div class="text-danger" id="ciudadError"></div>
                             <div class="text-danger" id="passwordError"></div>
 
+                            <!-- Sección para seleccionar el tipo de usuario solo si el usuario es administrador -->
+                            {% if user.is_staff %}
+                                <div class="form-group">
+                                    <label for="tipo_permiso">Tipo de Usuario</label>
+                                    <select name="tipo_permiso" id="tipo_permiso" class="form-control" required>
+                                        <option value="">Seleccione tipo de usuario</option>
+                                        <option value="Admin">Administrador</option>
+                                        <option value="User">Usuario</option>
+                                        <option value="Guest">Invitado</option>
+                                    </select>
+                                    <div class="text-danger" id="tipoPermisoError"></div>
+                                </div>
+                            {% endif %}
+
                             <a href="{% url 'home' %}">Ir al inicio</a> |
                             <a href="{% url 'login' %}">Iniciar Sesión</a>
                             <input type="submit" value="Registrar" class="btn btn-success float-right">

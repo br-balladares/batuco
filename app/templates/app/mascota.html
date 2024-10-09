@@ -1,0 +1,55 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Mis Mascotas{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <h2>Mis Mascotas</h2>
+    <div id="mensaje-exito" class="alert alert-success d-none">¡Operación exitosa!</div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if "perfil" not in message.tags %}  <!-- Filtrar mensajes de perfil -->
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row flex-column flex-nowrap overflow-auto" id="mascotas-lista" style="height: 400px; overflow-y: auto;">
+                {% if mascotas %}
+                    {% for mascota in mascotas %}
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ mascota.nombre_mascota }}</h5>
+                                    <p class="card-text">Especie: {{ mascota.especie_mascota }}</p>
+                                    <p class="card-text">Edad: {{ mascota.edad_mascota }} años</p>
+                                    <button class="btn btn-warning editar-btn" data-id="{{ mascota.id_mascota }}">Editar</button>
+                                    <form method="POST" action="{% url 'mascota' %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mascota_id" value="{{ mascota.id_mascota }}">
+                                        <button type="submit" class="btn btn-danger eliminar-btn">Eliminar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No tienes mascotas registradas.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4>Detalles de la Mascota</h4>
+            <div id="mascota-detalle" class="border p-3">
+                <p>Selecciona una mascota para ver los detalles.</p>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-primary" href="{% url 'agregar_mascota' %}">Agregar Mascota</a>
+</div>
+{% endblock %}

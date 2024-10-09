@@ -78,8 +78,7 @@ class Mascota(models.Model):
     nombre_mascota = models.CharField(max_length=100)
     edad_mascota = models.IntegerField(null=True, blank=True)
     especie_mascota = models.CharField(max_length=100)
-    tipo_mascota = models.CharField(max_length=100)
-
+    raza_mascota = models.CharField(max_length=100)
     #Foranea
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='mascotas')
 

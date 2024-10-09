@@ -9,9 +9,38 @@
 {% block contenido %}
 <div class="container-fluid">
     <h2>Editar Perfil</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="registroForm">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <div class="mb-3">
+            <label for="id_direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="id_direccion" name="direccion" value="{{ form.direccion.value|default_if_none:'' }}" required>
+            <div class="text-danger" id="direccionError"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_comuna" class="form-label">Comuna</label>
+            <input type="text" class="form-control" id="id_comuna" name="comuna" value="{{ form.comuna.value|default_if_none:'' }}" required>
+            <div class="text-danger" id="comunaError"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_ciudad" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="id_ciudad" name="ciudad" value="{{ form.ciudad.value|default_if_none:'' }}" required>
+            <div class="text-danger" id="ciudadError"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="id_telefono" name="telefono" value="{{ form.telefono.value|default_if_none:'' }}" required>
+            <div class="text-danger" id="telefonoError"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_icon" class="form-label">Icono</label>
+            <input type="file" class="form-control" id="id_icon" name="icon" accept="image/*">
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-success">Guardar Cambios</button>

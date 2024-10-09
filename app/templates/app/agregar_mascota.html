@@ -1,0 +1,45 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block contenido %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow" style="width: 50%;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Registrar Nueva Mascota</h2>
+            <form id="registroForm" method="post" enctype="multipart/form-data" autocomplete="off">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_nombre" class="form-label">Nombre de la Mascota</label>
+                    <input type="text" class="form-control" id="id_nombre" name="nombre_mascota" required>
+                    <div class="text-danger" id="nombreError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_especie" class="form-label">Especie</label>
+                    <input type="text" class="form-control" id="id_especie" name="especie_mascota" required>
+                    <div class="text-danger" id="especieError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_raza" class="form-label">Raza</label>
+                    <input type="text" class="form-control" id="id_raza" name="raza_mascota" required>
+                    <div class="text-danger" id="razaError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_edad" class="form-label">Edad</label>
+                    <input type="number" class="form-control" id="id_edad" name="edad_mascota" min="1" required>
+                    <div class="text-danger" id="edadError"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Guardar Mascota</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

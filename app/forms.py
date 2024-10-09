@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contacto, Usuario
+from .models import Contacto, Usuario, Mascota
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth. models import User
 import re
@@ -73,3 +73,10 @@ class UsuarioUpdateForm(forms.ModelForm):
 class LoginForm(forms.Form):
     correo = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class MascotaForm(forms.ModelForm):
+    class Meta:
+        model = Mascota
+        fields = ['nombre_mascota', 'edad_mascota', 'especie_mascota', 'raza_mascota']
+

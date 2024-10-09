@@ -51,12 +51,11 @@
                 {% endif %}
             </div>
             <a class="btn btn-primary" href="{% url 'actualizar' %}">Actualizar Información</a>
+            <a class="btn btn-secondary" href="{% url 'mascota' %}">Mis Mascotas</a>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block js %}
-<!-- Referencia al archivo JS -->
-<script src="{% static 'js/panel_toggle.js' %}"></script>
 {% endblock %}

@@ -90,7 +90,7 @@ class Migration(migrations.Migration):
                 ('nombre_mascota', models.CharField(max_length=100)),
                 ('edad_mascota', models.IntegerField(blank=True, null=True)),
                 ('especie_mascota', models.CharField(max_length=100)),
-                ('tipo_mascota', models.CharField(max_length=100)),
+                ('raza_mascota', models.CharField(max_length=100)),
                 ('id_usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='mascotas', to='app.usuario')),
             ],
         ),
